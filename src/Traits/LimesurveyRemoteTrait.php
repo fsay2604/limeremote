@@ -2,11 +2,15 @@
 
 namespace Evently\LimeRemote\Traits;
 
+use Evently\LimeRemote\Query\LimeRemoteQueryBuilder;
+
 trait LimesurveyRemoteTrait
 {
     public function getSessionKey()
     {
-        $request = ['get_session_key', [$this->username, $this->password]];
+        $request = LimeRemoteQueryBuilder::method('get_session_key')
+            ->withParams([$this->username, $this->password])
+            ->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -14,7 +18,9 @@ trait LimesurveyRemoteTrait
 
     public function releaseSessionKey()
     {
-        $request = ['release_session_key', [$this->sessionKey]];
+        $request = LimeRemoteQueryBuilder::method('release_session_key')
+            ->withParams([$this->sessionKey])
+            ->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -27,7 +33,7 @@ trait LimesurveyRemoteTrait
     public function activateSurvey(int $surveyId = null)
     {
         $surveyId = (! $surveyId) ? $this->limesurveyId : $surveyId;
-        $request = $this->createDefaultRequest('activate_survey', [$surveyId]);
+        $request = $this->query('activate_survey')->withParams([$surveyId])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -44,7 +50,7 @@ trait LimesurveyRemoteTrait
             return ['error'=>'Limesurvey Id not set'];
         }
         $attributes = ($attributes) ? $attributes : [];
-        $request = $this->createDefaultRequest('activate_tokens', [$this->limesurveyId, $attributes]);
+        $request = $this->query('activate_tokens')->withParams([$this->limesurveyId, $attributes])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -61,7 +67,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('add_group', [$this->limesurveyId, $groupTitle, $groupDescription]);
+        $request = $this->query('add_group')->withParams([$this->limesurveyId, $groupTitle, $groupDescription])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -76,7 +82,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('add_language', [$this->limesurveyId, $language]);
+        $request = $this->query('add_language')->withParams([$this->limesurveyId, $language])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -94,7 +100,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('add_participants', [$this->limesurveyId, $participantData, $createToken]);
+        $request = $this->query('add_participants')->withParams([$this->limesurveyId, $participantData, $createToken])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -109,7 +115,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('add_response', [$this->limesurveyId, $responseData]);
+        $request = $this->query('add_response')->withParams([$this->limesurveyId, $responseData])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -124,7 +130,7 @@ trait LimesurveyRemoteTrait
      */
     public function addSurvey(int $surveyId = null, string $surveyTitle, string $surveyLanguage, string $format)
     {
-        $request = $this->createDefaultRequest('add_survey', [$surveyId, $surveyTitle, $surveyLanguage, $format]);
+        $request = $this->query('add_survey')->withParams([$surveyId, $surveyTitle, $surveyLanguage, $format])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -139,7 +145,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('copy_survey', [$this->limesurveyId, $newName]);
+        $request = $this->query('copy_survey')->withParams([$this->limesurveyId, $newName])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -151,7 +157,7 @@ trait LimesurveyRemoteTrait
      */
     public function cpd_importParticipants(array $particiants)
     {
-        $request = $this->createDefaultRequest('cpd_importParticipants', [$particiants]);
+        $request = $this->query('cpd_importParticipants')->withParams([$particiants])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -162,7 +168,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('delete_group', [$this->limesurveyId, $groupID]);
+        $request = $this->query('delete_group')->withParams([$this->limesurveyId, $groupID])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -177,7 +183,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('delete_language', [$this->limesurveyId, $language]);
+        $request = $this->query('delete_language')->withParams([$this->limesurveyId, $language])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -192,7 +198,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('delete_participants', [$this->limesurveyId, $tokenIds]);
+        $request = $this->query('delete_participants')->withParams([$this->limesurveyId, $tokenIds])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -204,7 +210,7 @@ trait LimesurveyRemoteTrait
      */
     public function deleteQuestion(int $questionId)
     {
-        $request = $this->createDefaultRequest('delete_question', [$questionId]);
+        $request = $this->query('delete_question')->withParams([$questionId])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -218,7 +224,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('delete_survey', [$this->limesurveyId]);
+        $request = $this->query('delete_survey')->withParams([$this->limesurveyId])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -240,7 +246,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('export_responses', [$this->limesurveyId, $documentType, $languageCode, $completionStatus, $headingType, $responseType, $fromResponseId, $toResponseId, $fields]);
+        $request = $this->query('export_responses')->withParams([$this->limesurveyId, $documentType, $languageCode, $completionStatus, $headingType, $responseType, $fromResponseId, $toResponseId, $fields])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -263,7 +269,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('export_responses_by_token', [$this->limesurveyId, $documentType, $token, $languageCode, $completionStatus, $headingType, $responseType, $fromResponseId, $toResponseId, $fields]);
+        $request = $this->query('export_responses_by_token')->withParams([$this->limesurveyId, $documentType, $token, $languageCode, $completionStatus, $headingType, $responseType, $fromResponseId, $toResponseId, $fields])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -281,7 +287,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('export_statistics', [$this->limesurveyId, $docType, $language, $graph, $groupIds]);
+        $request = $this->query('export_statistics')->withParams([$this->limesurveyId, $docType, $language, $graph, $groupIds])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -298,7 +304,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('export_timeline', [$this->limesurveyId, $type, $start, $end]);
+        $request = $this->query('export_timeline')->withParams([$this->limesurveyId, $type, $start, $end])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -311,7 +317,7 @@ trait LimesurveyRemoteTrait
      */
     public function getGroupProperties(int $groupId, array $groupSettings)
     {
-        $request = $this->createDefaultRequest('get_group_properties', [$groupId, $groupSettings]);
+        $request = $this->query('get_group_properties')->withParams([$groupId, $groupSettings])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -327,7 +333,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('get_language_properties', [$this->limesurveyId, $surveyLocaleSettings, $lang]);
+        $request = $this->query('get_language_properties')->withParams([$this->limesurveyId, $surveyLocaleSettings, $lang])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -343,7 +349,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('get_participant_properties', [$this->limesurveyId, $tokenQueryProperties, $tokenProperties]);
+        $request = $this->query('get_participant_properties')->withParams([$this->limesurveyId, $tokenQueryProperties, $tokenProperties])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -357,7 +363,7 @@ trait LimesurveyRemoteTrait
      */
     public function getQuestionProperties(int $questionID, array $questionSettings = null, string $language = null)
     {
-        $request = $this->createDefaultRequest('get_question_properties', [$questionID, $questionSettings, $language]);
+        $request = $this->query('get_question_properties')->withParams([$questionID, $questionSettings, $language])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -370,7 +376,7 @@ trait LimesurveyRemoteTrait
      */
     public function getResponseIds(int $surveyID, string $token)
     {
-        $request = $this->createDefaultRequest('get_response_ids', [$surveyID, $token]);
+        $request = $this->query('get_response_ids')->withParams([$surveyID, $token])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -384,7 +390,7 @@ trait LimesurveyRemoteTrait
      */
     public function getSiteSettings(string $setttingName)
     {
-        $request = $this->createDefaultRequest('get_site_settings', [$setttingName]);
+        $request = $this->query('get_site_settings')->withParams([$setttingName])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -410,7 +416,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('get_summary', [$this->limesurveyId, $statName]);
+        $request = $this->query('get_summary')->withParams([$this->limesurveyId, $statName])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -425,7 +431,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('get_survey_properties', [$this->limesurveyId, $surveySettings]);
+        $request = $this->query('get_survey_properties')->withParams([$this->limesurveyId, $surveySettings])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -440,7 +446,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('get_uploaded_files', [$this->limesurveyId, $token]);
+        $request = $this->query('get_uploaded_files')->withParams([$this->limesurveyId, $token])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -458,7 +464,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('import_group', [$this->limesurveyId, $importData, $importDataType, $newGroupName, $newGroupDescription]);
+        $request = $this->query('import_group')->withParams([$this->limesurveyId, $importData, $importDataType, $newGroupName, $newGroupDescription])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -478,7 +484,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('import_question', [$this->limesurveyId, $groupId, $importData, 'lsq', $mandatory, $newQuestionTitle, $newqQuestion, $newQuestionHelp]);
+        $request = $this->query('import_question')->withParams([$this->limesurveyId, $groupId, $importData, 'lsq', $mandatory, $newQuestionTitle, $newqQuestion, $newQuestionHelp])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -493,7 +499,7 @@ trait LimesurveyRemoteTrait
      */
     public function importSurvey(string $importData, string $importDataType, string $newSurveyName = null, int $destSurveyID = null)
     {
-        $request = $this->createDefaultRequest('import_survey', [$importData, $importDataType, $newSurveyName, $destSurveyID]);
+        $request = $this->query('import_survey')->withParams([$importData, $importDataType, $newSurveyName, $destSurveyID])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -509,7 +515,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('invite_participants', [$this->limesurveyId, $tokenIds, $email]);
+        $request = $this->query('invite_participants')->withParams([$this->limesurveyId, $tokenIds, $email])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -523,7 +529,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('list_groups', [$this->limesurveyId]);
+        $request = $this->query('list_groups')->withParams([$this->limesurveyId])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -542,7 +548,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('list_participants', [$this->limesurveyId, $start, $limit, $unused, $attributes, $conditions]);
+        $request = $this->query('list_participants')->withParams([$this->limesurveyId, $start, $limit, $unused, $attributes, $conditions])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -558,7 +564,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('list_questions', [$this->limesurveyId, $groupId, $language]);
+        $request = $this->query('list_questions')->withParams([$this->limesurveyId, $groupId, $language])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -570,7 +576,7 @@ trait LimesurveyRemoteTrait
      */
     public function listSurveys(string $username = null)
     {
-        $request = $this->createDefaultRequest('list_surveys', [$username]);
+        $request = $this->query('list_surveys')->withParams([$username])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -582,7 +588,7 @@ trait LimesurveyRemoteTrait
      */
     public function listUsers(int $uid = null)
     {
-        $request = $this->createDefaultRequest('list_users', [$uid]);
+        $request = $this->query('list_users')->withParams([$uid])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -597,7 +603,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('mail_registered_participants', [$this->limesurveyId, $overrideAllConditions]);
+        $request = $this->query('mail_registered_participants')->withParams([$this->limesurveyId, $overrideAllConditions])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -616,7 +622,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('remind_participants', [$this->limesurveyId, $minDaysBetween, $maxReminders, $tokenIds]);
+        $request = $this->query('remind_participants')->withParams([$this->limesurveyId, $minDaysBetween, $maxReminders, $tokenIds])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -629,7 +635,7 @@ trait LimesurveyRemoteTrait
      */
     public function setGroupProperties(int $groupID, array $groupData)
     {
-        $request = $this->createDefaultRequest('set_group_properties', [$groupID, $groupData]);
+        $request = $this->query('set_group_properties')->withParams([$groupID, $groupData])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -645,7 +651,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('set_language_properties', [$this->limesurveyId, $surveyLocaleData, $language]);
+        $request = $this->query('set_language_properties')->withParams([$this->limesurveyId, $surveyLocaleData, $language])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -656,7 +662,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('set_participant_properties', [$this->limesurveyId, $tokenQueryProperties, $tokenData]);
+        $request = $this->query('set_participant_properties')->withParams([$this->limesurveyId, $tokenQueryProperties, $tokenData])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -670,7 +676,7 @@ trait LimesurveyRemoteTrait
      */
     public function setQuestionProperties(int $questionID, array $questionData, string $language = null)
     {
-        $request = $this->createDefaultRequest('set_question_properties', [$questionID, $questionData, $language]);
+        $request = $this->query('set_question_properties')->withParams([$questionID, $questionData, $language])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -683,7 +689,7 @@ trait LimesurveyRemoteTrait
      */
     public function setQuotaProperties(int $quotaId, array $quotaData)
     {
-        $request = $this->createDefaultRequest('set_quota_properties', [$quotaId, $quotaData]);
+        $request = $this->query('set_quota_properties')->withParams([$quotaId, $quotaData])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -698,7 +704,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('set_survey_properties', [$this->limesurveyId, $surveyData]);
+        $request = $this->query('set_survey_properties')->withParams([$this->limesurveyId, $surveyData])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -713,7 +719,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('update_response', [$this->limesurveyId, $responseData]);
+        $request = $this->query('update_response')->withParams([$this->limesurveyId, $responseData])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -730,7 +736,7 @@ trait LimesurveyRemoteTrait
         if (! $this->isLimesurveyIdSet()) {
             return ['error'=>'Limesurvey Id not set'];
         }
-        $request = $this->createDefaultRequest('upload_file', [$this->limesurveyId, $fieldName, $fileName, $fileContent]);
+        $request = $this->query('upload_file')->withParams([$this->limesurveyId, $fieldName, $fileName, $fileContent])->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
@@ -738,16 +744,14 @@ trait LimesurveyRemoteTrait
 
     public function genericRemoteQuery(string $query, array $queryAttributes)
     {
-        $request = $this->createDefaultRequest($query, $queryAttributes);
+        $request = $this->query($query)->withParams($queryAttributes)->build();
         $result = $this->client->call($request[0], $request[1]);
 
         return $result;
     }
 
-    protected function createDefaultRequest($type, array $variables)
+    protected function query(string $type): LimeRemoteQueryBuilder
     {
-        array_unshift($variables, $this->sessionKey);
-
-        return [$type, $variables];
+        return LimeRemoteQueryBuilder::method($type)->withSessionKey($this->sessionKey);
     }
 }
