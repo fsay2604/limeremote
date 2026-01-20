@@ -17,7 +17,8 @@
     }
   ],
   "require": {
-    "nesbot/carbon": "^1.26.3 || ^2.0"
+    "nesbot/carbon": "^1.26.3 || ^2.0",
+    "illuminate/support": "^8.0 || ^9.0 || ^10.0 || ^11.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~6.0"
@@ -30,6 +31,16 @@
   "autoload-dev": {
     "psr-4": {
       "Evently\\LimeRemote\\Tests\\": "tests"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Evently\\LimeRemote\\LimeRemoteServiceProvider"
+      ],
+      "aliases": {
+        "LimeRemote": "Evently\\LimeRemote\\Facades\\LimeRemote"
+      }
     }
   }
 }
