@@ -15,17 +15,29 @@ You can install the package via composer:
 composer require evently/limeremote
 ```
 
+### Laravel Boost (Codex)
+
+To enable Laravel Boost for Codex and start the MCP server:
+
+```bash
+composer require laravel/boost --dev
+php artisan boost:install codex
+php artisan boost:mcp
+```
+
 ## Usage
 
 ### Standard use
 
 ```php
-// First create a new remote with your user, password, remote control url and optionally a survey id.
-// The plugin creates a new remote and automatically gets a session key to communicate with Limesurvey
-$remote = new LimeRemote('admin', 'password', 'https://www.limesurvey.com/admin/remotecontrol',123456);
+use Evently\LimeRemote\Facades\LimeRemote;
+
+// Publish the config file first:
+// php artisan vendor:publish --tag=config
+// Then set LIMESURVEY_USERNAME, LIMESURVEY_PASSWORD, LIMESURVEY_URL, and LIMESURVEY_ID in your .env file.
 
 // Use any of the functions, optionally passing variables to the remote
-$surveys = $remote->listSurveys();
+$surveys = LimeRemote::listSurveys();
 
 /*
 Results in:
@@ -52,7 +64,7 @@ array:26 [
 
 // To use the genericRemoteQuery pass the action you want to trigger with the necessary variables
 // For instance, the list_participants action accepts start and limit, and optionally an unused boolean, an array of attributes to get and and array of conditions. So:
-$participant = $remote->genericRemoteQuery('list_participants', [123456,0,50,true])
+$participant = LimeRemote::genericRemoteQuery('list_participants', [123456,0,50,true])
 // will get the 50 first unused tokens
 /*
 array:50 [▼
@@ -81,7 +93,7 @@ The package will also come with helpers that make it easier to use several of th
 
 ```php
 
-$timeline = $remote->getLastNumDaysTimeline(8)
+$timeline = LimeRemote::getLastNumDaysTimeline(8)
 
 /*
 will result in
